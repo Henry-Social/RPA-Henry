@@ -300,7 +300,10 @@ class AnthropicService {
       const aiResponse = responseText.replace("Claude's response: ", "");
 
       // Check if image was found
-      if (responseText.toLowerCase().includes("not found")) {
+      if (
+        (mainImageBase64 || searchImageBase64) &&
+        responseText.toLowerCase().includes("not found")
+      ) {
         console.log("Reference image could not be found in the main image");
         throw new Error("Reference image could not be found in the main image");
       }
