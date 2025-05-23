@@ -283,6 +283,9 @@ class DashboardEditor extends React.Component {
 
         case 'aiPrompt':
           throw new Error('No select possible in aiPrompt mode')
+          
+        case 'aiPromptWimage':
+          throw new Error('No select possible in aiPromptWimage mode')
 
         case 'aiScreenXY':
           throw new Error('No select possible in aiScreenXY mode')

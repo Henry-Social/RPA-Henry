@@ -2139,6 +2139,80 @@ const runCommand = (command: any, index?: any, parentCommand?: any) => {
           throw new Error(error.message);
         });
     }
+    case "aiPromptWimage": {
+      console.log("aiPrompt...");
+
+      if (!target || !target.length) {
+        throw new Error("target is required");
+      }
+      let config = store.getState().config;
+      const anthropicAPIKey = config.anthropicAPIKey;
+      const model = config.model ?? C.ANTHROPIC_MODEL.COMPUTER_USE_MODEL_LATEST;
+      const temperature = config.temperature ?? 0.5;
+      console.log("anthropicAPIKey :>> ", anthropicAPIKey);
+
+      const anthropicService = new AnthropicService(
+        anthropicAPIKey,
+        model,
+        temperature
+      );
+
+      const isDesktop = isCVTypeForDesktop(vars.get("!CVSCOPE"));
+      return captureScreenShot({
+        vars,
+        isDesktop,
+      })
+        .then((imageBuffer: ArrayBuffer | null) => {
+          if (!imageBuffer) {
+            throw new Error("imageBuffer is required");
+          }
+          const start = Date.now();
+          return anthropicService
+            ?.aiPromptProcessImage(imageBuffer, null, target)
+            .then(({ coords, isSinglePoint, aiResponse }) => {
+              const end = Date.now();
+              const time = (end - start) / 1000;
+              const timeStr = time.toFixed(2);
+              store.dispatch(
+                act.addLog(
+                  "info",
+                  `Result received (${timeStr}s): Answer is: ${aiResponse}`
+                )
+              );
+
+              // found the target
+              const newVars = (() => {
+                vars.set(
+                  {
+                    [value]: aiResponse,
+                  },
+                  true
+                );
+                return {
+                  [value]: aiResponse,
+                };
+              })();
+
+              console.log("newVars:>> ", newVars);
+              console.log(
+                `newVars['!ai1'] === undefined: ${
+                  newVars["!ai1"] === undefined
+                }`
+              );
+
+              return compose()({
+                vars: newVars,
+                byPass: true,
+              });
+            })
+            .catch((error) => {
+              throw new Error(error.message);
+            });
+        })
+        .catch((error) => {
+          throw new Error(error.message);
+        });
+    }
 
     case "aiComputerUse": {
       console.log("aiComputerUse...");
