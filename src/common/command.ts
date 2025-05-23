@@ -109,6 +109,7 @@ export const commandScopes = {
     'OCRExtractScreenshot': CommandScope.All,
 
     'aiPrompt': CommandScope.All,
+    'aiPromptWimage': CommandScope.All,
     'aiScreenXY': CommandScope.All,
     'aiComputerUse': CommandScope.All,
 
