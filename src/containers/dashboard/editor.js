@@ -283,6 +283,9 @@ class DashboardEditor extends React.Component {
 
         case 'aiPrompt':
           throw new Error('No select possible in aiPrompt mode')
+          
+        case 'aiPromptWimage':
+          throw new Error('No select possible in aiPromptWimage mode')
 
         case 'aiScreenXY':
           throw new Error('No select possible in aiScreenXY mode')
@@ -1524,7 +1527,7 @@ class DashboardEditor extends React.Component {
     const isFindEnabled = selectedCmd && selectedCmd.cmd && canCommandFind(selectedCmd.cmd)
 
     const shouldUseSelectInputForTarget = selectedCmd && selectedCmd.targetOptions && selectedCmd.targetOptions.length  && doesCommandSupportTargetOptions(selectedCmd.cmd)
-    const shouldUseTextareaForTarget    = selectedCmd && ['executeScript', 'executeScript_Sandbox', 'aiPrompt', 'aiScreenXY', 'aiComputerUse'].indexOf(selectedCmd.cmd) !== -1
+    const shouldUseTextareaForTarget    = selectedCmd && ['executeScript', 'executeScript_Sandbox', 'aiPrompt', 'aiPromptWimage', 'aiScreenXY', 'aiComputerUse'].indexOf(selectedCmd.cmd) !== -1
     const shouldUseNormalInputForTarget = !shouldUseSelectInputForTarget && !shouldUseTextareaForTarget
 
     return (
